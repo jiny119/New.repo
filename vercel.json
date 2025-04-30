@@ -1,6 +1,24 @@
 {
+    "builds": [
+        {
+            "src": "api/tts.py",
+            "use": "@vercel/python"
+        }
+    ],
     "routes": [
-        { "src": "/api/tts", "dest": "/api/tts.py" },
-        { "src": "/(.*)", "dest": "/index.html" }
-    ]
+        {
+            "src": "/api/tts",
+            "dest": "api/tts.py",
+            "methods": ["POST", "OPTIONS"] // میتھڈز واضح کریں
+        },
+        {
+            "src": "/(.*)",
+            "dest": "index.html"
+        }
+    ],
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/index.html" }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
 }
