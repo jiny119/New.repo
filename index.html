@@ -1,26 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>اردو Text-to-Speech</title>
-</head>
-<body>
-    <h1>اردو ٹیکسٹ کو آواز میں تبدیل کریں</h1>
-    <textarea id="text" placeholder="یہاں متن لکھیں..."></textarea>
-    <button onclick="generateSpeech()">آواز بنائیں</button>
-    <audio id="audio" controls></audio>
-
-    <script>
-        async function generateSpeech() {
+<script>
+    async function generateSpeech() {
+        try {
             const text = document.getElementById("text").value;
             const response = await fetch("/api/tts", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text: text }),
             });
+            
+            if (!response.ok) {
+                throw new Error("سرور نے غلطی دی");
+            }
+
             const data = await response.json();
             const audio = document.getElementById("audio");
-            audio.src = data.audio;
+            
+            if (data.audio) {
+                audio.src = data.audio;
+                audio.play(); // یہ لائن ضروری ہے ⭐
+            } else {
+                alert("آواز نہیں بن سکی۔");
+            }
+        } catch (error) {
+            alert("خرابی: " + error.message);
         }
-    </script>
-</body>
-</html>
+    }
+</script>
